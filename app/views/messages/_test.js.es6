@@ -1,2 +1,2 @@
-let <%='x'%> = "ES6!!!!";
-alert(x)
+let x = "<%= message %>";
+console.log(x)
