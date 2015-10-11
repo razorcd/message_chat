@@ -4,8 +4,9 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'messages#index'
-  resource :messages
+  root "messages#index"
+  get "messages" => "messages#index"
+  get "stream" => "messages#stream"
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

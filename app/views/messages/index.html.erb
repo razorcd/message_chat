@@ -1,22 +1,39 @@
+<div id="chat-window"></div>
 
-<%= link_to "JS", messages_path, remote: true %>
-
-
-<script type="plain/babel">
-
-  $(function(){
-    let var1 = "asdasdas";
-    console.log(var1)
-  })
-
-</script>
-<script>
-  <%= render partial: "test", formats: [:js], handlers: [:es6, :erb], locals: {message: "ES local var!"} %>
-</script>
+<%= form_tag :messages do %>
+  <%= label_tag :username, "Username:" %>
+  <%= text_field_tag :username , nil, required: true %>
+  <%= text_area_tag :message , nil, required: true %>
+  <%= submit_tag :Send %>
+<% end %>
 
 <script>
   <%= es6_transform do %>
-    let a = 'INLINE ES6 with helper';
-    console.log(a);
+    $(document).ready(function() {
+      let source = new EventSource('/stream');
+      source.addEventListener('refresh', (e) => {
+        let jsonData = JSON.parse(e.data);
+        addMessageToChat(jsonData);
+      });
+      console.log("STREAM STARTED")
+
+      $("form").on("submit", function(e){
+        e.preventDefault();
+        let $form = $(this);
+        $.ajax({
+          type: $form.attr('method'),
+          url: $form.attr('action'),
+          data: $form.serialize()
+        })
+        $form.find("textarea").prop("value", "")
+      })
+    });
+
+    function addMessageToChat(jsonData){
+      let messageHtmlLine = $("<li>").html(`<strong>${jsonData.username}: </strong> ${jsonData.message}`);
+      $("#chat-window").append(messageHtmlLine);
+      let scrollHeight = $("#chat-window").prop('scrollHeight');
+      $("#chat-window").scrollTop(scrollHeight);
+    }
   <% end %>
 </script>

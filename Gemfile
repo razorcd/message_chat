@@ -20,6 +20,10 @@ gem 'babel-transpiler'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 
+gem 'puma'
+gem 'redis'
+
+
 group :development, :test do
   gem 'pry-byebug' #debugger
   gem 'pry-rails'
