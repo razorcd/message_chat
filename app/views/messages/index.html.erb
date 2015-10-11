@@ -1,0 +1,20 @@
+
+<%= link_to "JS", messages_path, remote: true %>
+
+
+<script type="plain/babel">
+
+  $(function(){
+    let var1 = "asdasdas";
+    console.log(var1)
+  })
+
+</script>
+<script>
+  <%= render partial: "test", formats: [:js], handlers: [:es6, :erb] %>
+</script>
+
+
+<script>
+  <%= Babel::Transpiler.transform("let a = 'INLINE ES6'; console.log(a);")["code"].html_safe %>
+</script>
